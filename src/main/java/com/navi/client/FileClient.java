@@ -23,18 +23,9 @@ public class FileClient {
     }
 
     public void readFile(String path) {
-        List<Order> orders = new ArrayList<>();
+        List<Order> orders = null;
         try {
-            File file = new File(path);
-            Scanner myReader = new Scanner(file);
-
-            while (myReader.hasNextLine()) {
-                String lineInput = myReader.nextLine();
-                Order order = parseLine(lineInput);
-                orders.add(order);
-
-            }
-            myReader.close();
+            orders =  getOrders(getLineInputs(path));
         } catch (FileNotFoundException e) {
             System.out.println("Invalid Filepath");
         }
@@ -48,6 +39,27 @@ public class FileClient {
                 trades) {
             System.out.println(trade);
         }
+    }
+
+    private List<String> getLineInputs(String path) throws FileNotFoundException{
+        List<String> lineInputs = new ArrayList<>();
+        File file = new File(path);
+        Scanner myReader = new Scanner(file);
+        while (myReader.hasNextLine()) {
+            String lineInput = myReader.nextLine();
+            lineInputs.add(lineInput);
+        }
+        myReader.close();
+        return lineInputs;
+    }
+
+    private List<Order> getOrders(List<String> lineInputs) {
+        List<Order> orders = new ArrayList<>();
+        for (String line : lineInputs) {
+            Order order = parseLine(line);
+            orders.add(order);
+        }
+        return orders;
     }
 
     public Order parseLine(String line) {
