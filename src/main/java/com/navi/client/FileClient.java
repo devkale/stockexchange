@@ -23,7 +23,7 @@ public class FileClient {
     }
 
     public void readFile(String path) {
-        List<Order> orders = null;
+        List<Order> orders = new ArrayList<>();
         try {
             orders =  getOrders(getLineInputs(path));
         } catch (FileNotFoundException e) {
