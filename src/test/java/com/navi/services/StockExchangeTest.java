@@ -1,34 +1,36 @@
-package com.navi.client;
+package com.navi.services;
 
 import com.navi.domain.Order;
+import com.navi.domain.OrderType;
 import com.navi.domain.Stock;
 import com.navi.domain.Trade;
-import com.navi.services.StockExchange;
-import com.navi.domain.OrderType;
+import org.junit.Test;
+import org.junit.Assert;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
+import java.util.List;
 
-public class TestClient {
-    public static void main(String[] args) {
+
+public class StockExchangeTest {
+
+    @Test
+    public void addOrder() {
         StockExchange stockExchange = StockExchange.getInstance();
-        Stock stock = new Stock("BAC");
+        Stock stock = stockExchange.getStock("BAC");
         stockExchange.addOrder(new Order(1, LocalTime.of(9, 45),stock, OrderType.SELL, new BigDecimal("240.12"),100));
         stockExchange.addOrder(new Order(2, LocalTime.of(9, 46),stock, OrderType.SELL, new BigDecimal("237.45"),90));
         stockExchange.addOrder(new Order(3, LocalTime.of(9, 47),stock, OrderType.BUY, new BigDecimal("238.10"),110));
         stockExchange.addOrder(new Order(4, LocalTime.of(9, 48),stock, OrderType.BUY, new BigDecimal("237.80"),10));
         stockExchange.addOrder(new Order(5, LocalTime.of(9, 49),stock, OrderType.BUY, new BigDecimal("237.80"),40));
         stockExchange.addOrder(new Order(6, LocalTime.of(9, 50),stock, OrderType.SELL, new BigDecimal("236.00"),50));
-        for(Trade trade:stockExchange.getTrades()) {
-            System.out.println(trade);
-        }
+
+        List<Trade> trades = stockExchange.getTrades();
+        Assert.assertEquals(trades.get(0).toString(), "#3 237.45 90 #2");
+        Assert.assertEquals(trades.get(1).toString(), "#3 236.00 20 #6");
+        Assert.assertEquals(trades.get(2).toString(), "#4 236.00 10 #6");
+        Assert.assertEquals(trades.get(3).toString(), "#5 236.00 20 #6");
     }
+
+
 }
-/*
-#1 09:45 BAC sell 240.12 100
-#2 09:46 BAC sell 237.45  90
-#3 09:47 BAC buy  238.10 110
-#4 09:48 BAC buy  237.80  10
-#5 09:49 BAC buy  237.80  40
-#6 09:50 BAC sell 236.00  50
-* */

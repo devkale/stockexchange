@@ -13,6 +13,9 @@ public class Order {
     protected int balanceQuantity;
 
     public Order(int id, LocalTime time, Stock stock, OrderType type, BigDecimal price, int quantity) {
+        if(id <= 0 || price.compareTo(new BigDecimal("0")) <=0 || quantity <=0 ) {
+            throw new IllegalArgumentException();
+        }
         this.stock = stock;
         this.quantity = quantity;
         this.balanceQuantity = quantity;
@@ -26,18 +29,9 @@ public class Order {
         return stock;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
     public BigDecimal getPrice() {
         return price;
     }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
     public int getId() {
         return id;
     }
